@@ -1,0 +1,33 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+   enum Mes{
+    JANEIRO,FEVEREIRO,MARCO,ABRIL,MAIO,JUNHO,JULHO,AGOSTO,SETEMBRO,OUTUBRO,NOVEMBRO,DEZEMBRO
+
+};
+typedef struct data{
+int dia, ano;
+enum Mes mes ;
+}Data;
+
+const char *Meses[] = {
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+};
+
+int main(void){
+    Data data;
+    printf("===Calendario===\n");
+    printf("Digite o Dia:\n");
+    scanf("%d", &data.dia);
+
+    printf("Digite o Mes(1-12):\n");
+    scanf("%d", &data.mes);
+
+    printf("Digite o Ano:\n");
+    scanf("%d", &data.ano);
+
+    printf("%02d/%s/%d", data.dia, Meses[data.mes-1], data.ano);
+
+return 0;
+}

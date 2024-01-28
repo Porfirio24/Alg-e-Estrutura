@@ -1,56 +1,85 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
-{
-    printf("Insira o total de entrevistados: ");
-    int n;
-    scanf("%d", &n);
-    char *sex = (char *)malloc(n * sizeof(char));
-    int *gostaram = (int *)malloc(n * sizeof(int));
-    for (int i = 0; i < n; i++)
-    {
-        printf("Qual o sexo da %dº pessoa (M/F): ", i + 1);
-        scanf(" %c", &sex[i]);
-        printf("A pessoa gostou ou nao? (1 - Gostou) (0 - Nao)");
-        scanf("%d", &gostaram[i]);
+char* inicializa_vetor_char(int tamanho);
+
+void contador_mulheres(char sexo, char opiniao, int *qtd_mulheres, int *mulheres_gostaram);
+
+void contador_homens(char sexo, char opiniao, int *qtd_homens, int *homens_nao_gostaram);
+
+void isAlloc(char* vetor){
+    if (vetor == NULL){
+        printf("Erro na alocacao de memoria.\n");
+        exit(EXIT_FAILURE);
     }
-    float fa = 0;
-    float mulheres = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (sex[i] == 'F')
-        {
-            mulheres++;
-            if (gostaram[i] == 1)
-            {
-                fa++;
-            }
-        }
-    }
-    float mn = 0;
-    float homens = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (sex[i] == 'M')
-        {
-            homens++;
-            if (gostaram[i] == 0)
-            {
-                mn++;
-            }
-        }
-    }
-    if (mulheres > 0)
-    {
-        float pmg = (fa / mulheres) * 100;
-        printf("Porcentagem de mulheres que gostaram do produto: %%%.2f\n", pmg);
-    }
-    if (homens > 0)
-    {
-        float hmn = ((mn / homens) * 100);
-        printf("Porcentagem de homens que nao gostaram do produto: %%%.2f\n", hmn);
+}
+
+int main(void){
+    char *sexo; 
+    char *opiniao;
+    int num_entrevistados;
+    int qtd_mulheres = 0, qtd_homens = 0;
+    int mulheres_gostaram = 0, homens_nao_gostaram = 0;  
+
+    printf("Informe o numero de pessoas entrevistadas: ");
+    scanf("%d", &num_entrevistados);
+
+    sexo = inicializa_vetor_char(num_entrevistados);
+    isAlloc(sexo);
+    opiniao = inicializa_vetor_char(num_entrevistados);
+    isAlloc(opiniao);
+
+    for(int pessoa = 0; pessoa < num_entrevistados; pessoa++){
+        char resposta;
+        printf("Informe o seu sexo (F/M): ");
+        scanf(" %c", &resposta);
+        sexo[pessoa] = resposta;
+
+        printf("Voce gostou do produto? (S/N): ");
+        scanf(" %c", &resposta);
+        opiniao[pessoa] = resposta;
+
+        contador_mulheres(sexo[pessoa], opiniao[pessoa], &qtd_mulheres, &mulheres_gostaram);
+        contador_homens(sexo[pessoa], opiniao[pessoa], &qtd_homens, &homens_nao_gostaram);
     }
 
+    float porcentagem_mulheres = 0.0;
+    float porcentagem_homens = 0.0;
+
+    if (qtd_mulheres > 0) {
+        porcentagem_mulheres = (mulheres_gostaram / (float)qtd_mulheres) * 100;
+    }
+
+    if (qtd_homens > 0) {
+        porcentagem_homens = (homens_nao_gostaram / (float)qtd_homens) * 100;
+    }
+
+    printf("A porcentagem de mulheres que gostaram do produto e de %.2f%% \n", porcentagem_mulheres);
+    printf("A porcentagem de homens que não gostaram do produto e de %.2f%% \n", porcentagem_homens);
+
+    free(sexo);
+    free(opiniao);
     return 0;
+}      
+
+char* inicializa_vetor_char(int tamanho){
+    return (char *) malloc (tamanho * sizeof(char));
+}
+
+void contador_mulheres(char sexo, char opiniao, int *qtd_mulheres, int *mulheres_gostaram){
+    if(sexo == 'F' || sexo == 'f'){
+        (*qtd_mulheres)++;
+        if (opiniao == 'S' || opiniao == 's'){
+            (*mulheres_gostaram)++;
+        }
+    }
+}
+
+void contador_homens(char sexo, char opiniao, int *qtd_homens, int *homens_nao_gostaram){
+    if(sexo == 'M' || sexo == 'm'){
+        (*qtd_homens)++;
+        if (opiniao == 'N' || opiniao == 'n'){
+            (*homens_nao_gostaram)++;
+        }
+    }
 }

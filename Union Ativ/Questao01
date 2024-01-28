@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef union gen{
+    char masc[10];
+    char fem[10];
+}Genero;
+
+typedef struct Pessoa{
+    char nome[50];
+    int idade;
+    Genero gen;
+}pessoa;
+
+void dados_Pessoa(pessoa *p){
+    int opcao;
+    printf("Digite seu nome");
+    scanf("%s", p -> nome);
+
+    printf("Digite sua idade");
+    scanf("%d", p -> idade);
+
+    printf("Digite 1 para masculino e 0 para Feminino: ");
+    scanf("%d", &opcao);
+    if (opcao){
+        scanf("%s", p ->gen.masc);
+    }else{
+        scanf("%s", p ->gen.fem);
+    }
+}
+
+int main (void){
+    pessoa *pessoa = malloc(sizeof (pessoa));
+    dados_pessoa(pessoa);
+
+    printf("====Dados Pessoais\n====");
+    printf("Nome:%s\n", pessoa -> nome);
+    printf("Idade:%d\n", pessoa -> idade);
+    printf("Genero:%s\n", pessoa ->gen.masc); //ver se é masc ou pode ser uma so
+    printf("Genero:%s\n", pessoa ->gen.fem);
+    free(pessoa);
+    return 0;
+}
